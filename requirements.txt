@@ -1,5 +1,8 @@
+celery
+celery-progress
 coverage
 django
+django-celery-results
 django_q
 djangorestframework
 gitpython

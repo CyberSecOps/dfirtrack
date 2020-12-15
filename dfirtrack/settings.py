@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
+    'celery_progress',
 ]
 
 MIDDLEWARE = [
@@ -128,6 +130,7 @@ LOGGING = {
     },
 }
 
+# django q
 Q_CLUSTER = {
     'name': 'dfirtrack',
     'workers': 4,
@@ -136,6 +139,7 @@ Q_CLUSTER = {
     #'sync': True,
 }
 
+# rest
 REST_FRAMEWORK = {
 'DEFAULT_AUTHENTICATION_CLASSES' : [
    'rest_framework.authentication.BasicAuthentication',
@@ -145,6 +149,12 @@ REST_FRAMEWORK = {
        'rest_framework.permissions.IsAuthenticated',
    ],
 }
+
+# celery
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
 
 # import local settings for development
 try:

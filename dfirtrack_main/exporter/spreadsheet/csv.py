@@ -1,11 +1,15 @@
+from celery import shared_task
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from dfirtrack_config.models import MainConfigModel, SystemExporterSpreadsheetCsvConfigModel
 from dfirtrack_main.logger.default_logger import debug_logger, info_logger
 from dfirtrack_main.models import System
 import csv
-from time import strftime
+from time import sleep, strftime
+from dfirtrack_main.tasks import go_to_sleep
 
 
 def write_csv(username, csv_file):
@@ -267,6 +271,13 @@ def write_csv(username, csv_file):
     # return csv object
     return csv_file
 
+#@shared_task(bind=True)
+#def foobar(self, duration):
+#    sleep(duration)
+#    #return HttpResponse('work done!')
+#    #return redirect(reverse('system_list'))
+#    return 'done'
+
 @login_required(login_url="/login")
 def system(request):
 
@@ -279,11 +290,23 @@ def system(request):
     # get username from request object
     username = str(request.user)
 
-    # call main function
-    csv_browser = write_csv(username, csv_browser)
+#    # call main function
+#    csv_browser = write_csv(username, csv_browser)
+#
+#    # return spreadsheet object to browser
+#    return csv_browser
 
-    # return spreadsheet object to browser
-    return csv_browser
+    # returns task (used for task id)
+    task = go_to_sleep.delay(0.2)
+
+    #return HttpResponse('work done!')
+
+    #sleep(5)
+
+    # this happens immediately (also sending task id to the template)
+    # TODO: change back to something with reverse
+    #return redirect(reverse('status'), {'task_id': task.task_id})
+    return render(request, 'dfirtrack_config/status/status.html', {'task_id': task.task_id})
 
 def system_cron():
 

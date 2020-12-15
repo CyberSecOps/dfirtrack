@@ -9,10 +9,10 @@
     DFIRTrack - Status
 </title>
 
+{% load static %}
+
 <!-- HTML head in maintemplate -->
 {% endblock %}
-
-{% load static %}
 
 <!-- ############################################ -->
 
@@ -155,6 +155,21 @@
         </div>
 
     <!-- systems card -->
+    </div>
+
+    <!-- progress card -->
+    <div class="card col-6 bg-dark border-light card-body top-distance">
+
+        <div id="progress-wrapper">
+            <button id="progress-bar-trigger">Run</button>
+            <div id="progress-bar" style="background-color: blue; width: 0%;">&nbsp;</div>
+            <div id="progress-bar-message">Waiting for progress to start...</div>
+        </div>
+
+        <link rel="stylesheet" href="{% static 'dfirtrack_main/dfirtrack/dfirtrack.css' %}" type = "text/css"/>
+        <script src="{% static 'dfirtrack_main/dfirtrack/dfirtrack.js' %}"></script>
+
+    <!-- progress card -->
     </div>
 
 <!-- systems row -->
